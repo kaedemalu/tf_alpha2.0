@@ -1,33 +1,48 @@
-FROM alpine:3.7
+FROM ubuntu:18.04
 
-RUN apk --update-cache \
-    add linux-headers \
-    gcc \
-    g++ \
-    make \
-    openblas-dev \
+# Pick up some TF dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    libfreetype6-dev \
+    libhdf5-serial-dev \
+    libpng-dev \
+    libzmq3-dev \
+    pkg-config \
     python \
     python-dev \
-    python3 \
-    python3-dev
+    rsync \
+    software-properties-common \
+    unzip \
+    && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN mkdir /app
-WORKDIR /app
+RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
+    python get-pip.py && \
+    rm get-pip.py
 
-RUN pip3 install --upgrade pip
-RUN pip install Pillow \
-    # h5py \
+RUN pip --no-cache-dir install \
+    Pillow \
+    h5py \
     ipykernel \
     jupyter \
     keras_applications \
     keras_preprocessing \
-    # matplotlib \
+    matplotlib \
     numpy \
-    # pandas \
+    pandas \
     scipy \
-    sklearn
+    sklearn \
+    && \
+    python -m ipykernel.kernelspec
 
-RUN python -m ipykernel.kernelspec
+# --- DO NOT EDIT OR DELETE BETWEEN THE LINES --- #
+# These lines will be edited automatically by parameterized_docker_build.sh. #
+# COPY _PIP_FILE_ /
+# RUN pip --no-cache-dir install /_PIP_FILE_
+# RUN rm -f /_PIP_FILE_
 
+# Install TensorFlow CPU version from central repo
 RUN pip --no-cache-dir install \
     tensorflow==2.0.0-alpha0
