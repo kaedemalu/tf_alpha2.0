@@ -2,7 +2,8 @@
 docker run \
 --rm -it \
 -p 8888:8888 \
--v $(pwd):/app \
+-v $(pwd):/app:Z \
 -w /app \
-tensor-keras \
+tensor-alpha \
+bash \
 "$@"

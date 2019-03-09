@@ -37,12 +37,6 @@ RUN pip --no-cache-dir install \
     && \
     python -m ipykernel.kernelspec
 
-# --- DO NOT EDIT OR DELETE BETWEEN THE LINES --- #
-# These lines will be edited automatically by parameterized_docker_build.sh. #
-# COPY _PIP_FILE_ /
-# RUN pip --no-cache-dir install /_PIP_FILE_
-# RUN rm -f /_PIP_FILE_
-
 # Install TensorFlow CPU version from central repo
 RUN pip --no-cache-dir install \
     tensorflow==2.0.0-alpha0
